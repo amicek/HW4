@@ -1,0 +1,93 @@
+class Ball {
+  float x, y;
+  float vx, vy;
+  float radius;
+  color c;
+  Ball(color c1) {
+    x=random(width);
+    y=random(height);
+    radius=10;
+    vx=3;
+    vy=2;
+    c=c1;
+  }
+  void draw() {
+    fill(c);
+    ellipse(x, y, radius*2, radius*2);
+  }
+  void step() {
+    x=x+vx;
+    y=y+vy;
+    if (x<radius||x>width-radius) {
+      vx=-vx;
+    }
+    if (y<radius||y>height-radius) {
+      vy=-vy;
+    }
+  }
+}
+
+class Paddle {
+  float x, y;
+  float vy;
+  Paddle(float x1) {
+    y=random(height-120);
+    vy=3;
+    x=x1;
+  }
+  void draw() {
+    fill(0, 0, 0);
+    y = mouseY-60;
+
+    if (y < 0) {
+      y = 0;
+    } else if (y +120 > height) {
+      y = height - 120;
+    }
+    rect(x, y, 20, 120);
+  }
+  void step() {
+    y=y+vy;
+    if (mouseY<60) {
+      y=y+60;
+    }
+  }
+}
+class Paddle2 {
+  float x, y;
+  float vy;
+  Paddle2(float x1) {
+    y=random(height-120);
+    vy=3;
+    x=x1;
+  }
+  void draw() {
+    fill(0, 0, 0);
+    rect(x, y, 20, 120);
+  }
+  void step() {
+    y=y+vy;
+    if (y<0||y+120>width) {
+      vy=-vy;
+    }
+  }
+}
+Ball b; 
+Paddle2 a; 
+Paddle c;
+void setup() {
+  size(500, 500);
+  noStroke();
+  b=new Ball(color(255, 0, 0));
+  a=new Paddle2(460);
+  c=new Paddle(20);
+}
+void draw() {
+  background(255);
+  a.draw();
+  b.draw();
+  c.draw();
+  a.step();
+  b.step();
+  c.step();
+}
