@@ -1,93 +1,58 @@
 class Ball {
   float x, y;
   float vx, vy;
-  float radius;
+  float size = 10;
   color c;
-  Ball(color c1) {
-    x=random(width);
-    y=random(height);
-    radius=10;
-    vx=3;
-    vy=2;
-    c=c1;
+
+  Ball(float x, float y, color c) {
+    this.x = x;
+    this.y = y;
+    this.c = c;
+    vx = random(.6, 1);
+    vy = random(.6, 1);
   }
+
   void draw() {
+    noStroke();
     fill(c);
-    ellipse(x, y, radius*2, radius*2);
+    ellipse(x, y, size*2, size*2);
   }
-  void step() {
-    x=x+vx;
-    y=y+vy;
-    if (x<radius||x>width-radius) {
-      vx=-vx;
+
+  void move() {
+    x += vx;
+    y += vy;
+    if (x < size || x > width-size) {
+      vx = -vx;
     }
-    if (y<radius||y>height-radius) {
-      vy=-vy;
+    if (y < size || y > height-size) {
+      vy = -vy;
     }
   }
 }
 
-class Paddle {
-  float x, y;
-  float vy;
-  Paddle(float x1) {
-    y=random(height-120);
-    vy=3;
-    x=x1;
-  }
-  void draw() {
-    fill(0, 0, 0);
-    y = mouseY-60;
+ArrayList<Ball> list;
+float hue;
 
-    if (y < 0) {
-      y = 0;
-    } else if (y +120 > height) {
-      y = height - 120;
-    }
-    rect(x, y, 20, 120);
-  }
-  void step() {
-    y=y+vy;
-    if (mouseY<60) {
-      y=y+60;
-    }
-  }
-}
-class Paddle2 {
-  float x, y;
-  float vy;
-  Paddle2(float x1) {
-    y=random(height-120);
-    vy=3;
-    x=x1;
-  }
-  void draw() {
-    fill(0, 0, 0);
-    rect(x, y, 20, 120);
-  }
-  void step() {
-    y=y+vy;
-    if (y<0||y+120>width) {
-      vy=-vy;
-    }
-  }
-}
-Ball b; 
-Paddle2 a; 
-Paddle c;
 void setup() {
   size(500, 500);
-  noStroke();
-  b=new Ball(color(255, 0, 0));
-  a=new Paddle2(460);
-  c=new Paddle(20);
+  colorMode(HSB);
+
+  list = new ArrayList<Ball>();
+
+  for (int x = 20; x < width-20; x += 20) {      
+    for (int y = 20; y < height-20; y += 20) {
+      list.add(new Ball(x, y, color(hue, 255, 255)));
+       hue = hue+.4;
+    }    
+
+  }
 }
+
 void draw() {
   background(255);
-  a.draw();
-  b.draw();
-  c.draw();
-  a.step();
-  b.step();
-  c.step();
+
+  for (int i = 0; i < list.size(); i += 1) {
+    list.get(i).draw();
+    list.get(i).move();
+  }
 }
